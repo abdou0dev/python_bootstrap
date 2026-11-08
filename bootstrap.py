@@ -1,17 +1,19 @@
 import os, venv, subprocess, sys
 from pathlib import Path
 
+LINUX = True if sys.platform == 'linux' else False
+
 print("*************** BOOTSTRAP ****************")
 
 def create_venv(path, packages=None):
 	print(f"Creating environment at {path}")
 	venv.create(path, with_pip=True)
 	print("environment has been created.")
-	if sys.platform == 'win32':
-		env = os.path.join(path, 'Scripts', 'python.exe')
-	else:
+	if LINUX:
 		env = os.path.join(path, 'bin', 'python3')
-
+	else:
+		env = os.path.join(path, 'Scripts', 'python.exe')
+		
 	if packages:
 		try:
 			print("Attempting to install packages...")
@@ -37,7 +39,7 @@ while True:
 			
 		if packages:
 			packages = packages.split(' ')
-			print(packages)
+			print(f"Installing the following packages:\n {packages}")
 
 		create_venv(venv_path, packages)
 		break
